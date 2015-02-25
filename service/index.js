@@ -67,7 +67,6 @@ Generator.prototype.createServiceFiles = function createServiceFiles() {
     var appName = this.env.options.applName;
 
     this.appTemplate(path.join('service', this.type), appPath + '/scripts/services/' + this.name);
-    this.testTemplate('unit/service', appPath + '/test/unit/services/' + this.name);
     this.addScriptToIndex('app', appName + '/scripts/services/' + this.name);
 
 };

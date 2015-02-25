@@ -58,7 +58,6 @@ Generator.prototype.createControllerFiles = function createControllerFiles() {
     var appName = this.env.options.applName;
 
     this.appTemplate('controller', appPath + '/scripts/controllers/' + this.name);
-    this.testTemplate('unit/controller', appPath + '/test/unit/controllers/' + this.name);
     this.addScriptToIndex('app', appName + '/scripts/controllers/' + this.name);
 
 };

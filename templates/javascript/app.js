@@ -1,6 +1,13 @@
 'use strict';
-
-angular.module('<%= _.camelize(appname) %>App', ['ngRoute'])
+/**
+ * @ngdoc overview
+ * @name <%= _.camelize(appname) %>
+ * @description
+ * # <%= _.camelize(appname) %>
+ *
+ * Main module of the application.
+ */
+angular.module('<%= _.camelize(appname) %>App', ['ngRoute', 'ngRoute', 'ngSanitize', 'pascalprecht.translate'])
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
 
         //set HTML5 mode

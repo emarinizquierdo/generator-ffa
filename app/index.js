@@ -24,6 +24,8 @@ var welcome =
 
 var Generator = module.exports = function Generator(args, options) {
 
+    console.log(welcome);
+
     if (fs.existsSync('package.json')) {
         fs.unlinkSync('package.json');
     }
@@ -49,26 +51,10 @@ var Generator = module.exports = function Generator(args, options) {
 
     var args = ['main'];
 
-    if (this.appname != path.basename(process.cwd())) {
-
-        this.appname = this.appname.replace(/\-/g, "");
-        this.env.options.appPath = 'app';
-        this.env.options.appPath += '/' + this.appname;
-        this.apppath = this.env.options.appPath;
-        this.jquery = true;
-        this.bootstrap = true;
-        this.compasssass = false;
-        this.bbvafront = true;
-        this.resourceModule = true;
-        this.cookiesModule = true;
-        this.sanitizeModule = true;
-
-    } else {
-
-        this.env.options.appPath = 'app';
-        this.appPath = this.env.options.appPath;
-
-    }
+    this.appname = this.appname.replace(/\-/g, "");
+    this.env.options.appPath = 'app';
+    this.env.options.appPath += '/' + this.appname;
+    this.apppath = this.env.options.appPath;
 
     if (typeof this.env.options.minsafe === 'undefined') {
         this.option('minsafe');
@@ -110,6 +96,7 @@ var Generator = module.exports = function Generator(args, options) {
 util.inherits(Generator, yeoman.generators.Base);
 
 if (this.appname == path.basename(process.cwd())) {
+    
     Generator.prototype.askForAppName = function askForAppName() {
         var cb = this.async();
 
@@ -131,115 +118,7 @@ if (this.appname == path.basename(process.cwd())) {
             cb();
         }.bind(this));
     };
-
-    Generator.prototype.askForJQuery = function askForJQuery() {
-        var cb = this.async();
-
-        this.prompt({
-            name: 'jquery',
-            message: 'Would you like to include jQuery?',
-            default: true,
-            warning: 'Yes: All jQuery files will be placed into the scripts app/vendor directory.'
-        }, function(err, props) {
-            if (err) {
-                return this.emit('error', err);
-            }
-
-            this.jquery = props.jquery;
-
-            cb();
-        }.bind(this));
-    };
-
-    Generator.prototype.askForBootstrap = function askForBootstrap() {
-        var cb = this.async();
-
-        this.prompt({
-            name: 'bootstrap',
-            message: 'Would you like to include Twitter Bootstrap (3.0.0)?',
-            default: true,
-            warning: 'Yes: All Twitter Bootstrap files will be placed into the styles directory.'
-        }, function(err, props) {
-            if (err) {
-                return this.emit('error', err);
-            }
-
-            this.bootstrap = props.bootstrap;
-
-            cb();
-        }.bind(this));
-    };
-
-    Generator.prototype.askForSass = function askForSass() {
-        var cb = this.async();
-
-        this.prompt({
-            name: 'compasssass',
-            message: 'Would you like to have SASS/SCSS compatibility?',
-            default: false,
-            warning: 'Yes: You have to install Ruby/Sass/Compass manually.'
-        }, function(err, props) {
-            if (err) {
-                return this.emit('error', err);
-            }
-
-            this.compasssass = props.compasssass;
-
-            cb();
-        }.bind(this));
-    };
-
-    Generator.prototype.askForBBVAFront = function askForBBVAFront() {
-        var cb = this.async();
-
-        this.prompt({
-            name: 'bbvafront',
-            message: 'Would you like to include BBVA Front Library?',
-            default: true,
-            warning: 'Yes: BBVA Front library will be placed into the app/vendor directory.'
-        }, function(err, props) {
-            if (err) {
-                return this.emit('error', err);
-            }
-
-            this.bbvafront = props.bbvafront;
-
-            cb();
-        }.bind(this));
-    };
-
-    Generator.prototype.askForModules = function askForModules() {
-        var cb = this.async();
-
-        var prompts = [{
-            name: 'resourceModule',
-            message: 'Would you like to include angular-resource.js?',
-            default: true,
-            warning: 'Yes: angular-resource added to bower.json'
-        }, {
-            name: 'cookiesModule',
-            message: 'Would you like to include angular-cookies.js?',
-            default: true,
-            warning: 'Yes: angular-cookies added to bower.json'
-        }, {
-            name: 'sanitizeModule',
-            message: 'Would you like to include angular-sanitize.js?',
-            default: true,
-            warning: 'Yes: angular-sanitize added to bower.json'
-        }];
-
-        this.prompt(prompts, function(err, props) {
-            if (err) {
-                return this.emit('error', err);
-            }
-
-            this.resourceModule = props.resourceModule;
-            this.cookiesModule = props.cookiesModule;
-            this.sanitizeModule = props.sanitizeModule;
-
-            cb();
-        }.bind(this));
-    };
+    
 
 }
 
@@ -253,17 +132,12 @@ Generator.prototype.createIndexHtml = function createIndexHtml() {
 
 Generator.prototype.packageFiles = function() {
 
-    var appPath = this.env.options.appPath;
+    var appPath = '.';
 
-    this.template('../../templates/common/config.json', path.join(appPath, '/config.json'));
-    this.template('../../templates/common/package.json', 'package.json');
-    this.template('../../templates/common/bower.json', 'bower.json');
-
-    appPath = '.';
-    this.template('../../templates/common/Gruntfile.js', path.join(appPath, 'Gruntfile.js'));
-    this.template('../../templates/common/gae.json', path.join(appPath, 'gae.json'));
-    this.template('../../templates/common/package.json', path.join(appPath, 'package.json'));
-    this.template('../../templates/common/bower.json', path.join(appPath, 'bower.json'));
+    this.template('../../templates/common/_config.json', path.join(appPath, '/config.json'));
+    this.template('../../templates/common/_Gruntfile.js', path.join(appPath, 'Gruntfile.js'));
+    this.template('../../templates/common/_package.json', path.join(appPath, 'package.json'));
+    this.template('../../templates/common/_bower.json', path.join(appPath, 'bower.json'));
     this.template('../../templates/common/root/extra/.bowerrc', path.join(appPath, '.bowerrc'));
     this.template('../../templates/common/proxy.js', path.join(appPath, 'proxy.js'));
 

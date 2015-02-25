@@ -54,7 +54,6 @@ Generator.prototype.createFilterFiles = function createFilterFiles() {
     var appName = this.env.options.applName;
 
     this.appTemplate('filter', appPath + '/scripts/filters/' + this.name);
-    this.testTemplate('unit/filter', appPath + '/test/unit/filters/' + this.name);
     this.addScriptToIndex('app', appName + '/scripts/filters/' + this.name);
 
 };

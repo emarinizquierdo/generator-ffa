@@ -5,14 +5,10 @@ var mountFolder = function(connect, dir) {
 };
 
 // # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
-
 module.exports = function(grunt) {
-    // load all grunt tasks
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+    // Load grunt tasks automatically
+    require('load-grunt-tasks')(grunt);
 
     // configurable paths
     var yeomanConfig = {
@@ -27,13 +23,6 @@ module.exports = function(grunt) {
 
     } catch (e) {}
 
-    try {
-        gaeConfig.appengineSdkPath = require('./gae.json').appengineSdkPath || "C:/appengine-java-sdk-1.8.1.1/bin/dev_appserver.cmd";
-        gaeConfig.warPath = require('./gae.json').warPath || ".";
-        gaeConfig.address = require('./gae.json').address || "0.0.0.0";
-        gaeConfig.port = require('./gae.json').port || "8888";
-    } catch (e) {}
-
     //Destination to cssmin and uglify
     yeomanConfig.cssminDest = {};
     yeomanConfig.cssminDest['dist/' + yeomanConfig.name + '/styles/css/main.css'] = [yeomanConfig.appPath + '/styles/css/{,*/}*.css'];
@@ -42,25 +31,14 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         yeoman: yeomanConfig,
-        watch: {
-            options: {
-                livereload: true
-            },
-            scripts: {
-                files: [
-                    'app/index.jsp', 'app/<%= yeoman.name %>/{,*/}*.html',
-                    'app/{.tmp,<%= yeoman.name %>}/styles/{,*/}*.css',
-                    'app/{.tmp,<%= yeoman.name %>}/scripts/{,*/}*.js',
-                    'app/<%= yeoman.name %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-                ]
-            }
-        },
         connect: {
             options: {
                 port: 8888,
                 // Change this to '0.0.0.0' to access the server from outside.
-                hostname: '0.0.0.0',
-                base: 'app'
+                hostname: 'localhost',
+                base: 'app',
+                open: true,
+                keepalive: true
             },
             server: {
                 middleware: function(connect) {
@@ -68,31 +46,6 @@ module.exports = function(grunt) {
                         connect.static(options.base)
                     ];
                 }
-            },
-            test: {
-                middleware: function(connect) {
-                    return [
-                        connect.static(options.base)
-                    ];
-                }
-            },
-            dist: {
-                middleware: function(connect) {
-                    return [
-                        connect.static(yeomanConfig.dist)
-                    ];
-                }
-            }
-        },
-        open: {
-            server: {
-                url: 'http://localhost:<%= connect.options.port %>'
-            },
-            test: {
-                url: 'http://localhost:8080'
-            },
-            testkarma: {
-                url: 'http://localhost:8080/_karma_'
             }
         },
         clean: {
@@ -139,54 +92,32 @@ module.exports = function(grunt) {
                 dirs: [yeomanConfig.dist]
             }
         },
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: yeomanConfig.appPath + '/images',
-                    src: '{,*/}*.{png,jpg,jpeg}',
-                    dest: yeomanConfig.dist + '/images'
-                }]
-            }
-        },
         cssmin: {
             options: {
-                banner: '/* ' + yeomanConfig.name + ' - <%= revision %> \n' +
-                    ' * <%= grunt.template.today("dd/mm/yyyy") %> \n' +
+                banner: '/* ' + yeomanConfig.name + ' - <%%= revision %> \n' +
+                    ' * <%%= grunt.template.today("dd/mm/yyyy") %> \n' +
                     ' */\n'
             },
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/<%= yeoman.name %>/styles/main.css': [
-                        '<%= yeoman.dist %>/<%= yeoman.name %>/styles/main.css'
+                    '<%%= yeoman.dist %>/<%%= yeoman.name %>/styles/main.css': [
+                        '<%%= yeoman.dist %>/<%%= yeoman.name %>/styles/main.css'
                     ]
                 }
             }
         },
-        <%
-        if (compasssass) { %>
-            compass: {
-                server: {
-                    options: {
-                        sassDir: yeomanConfig.appPath + '/styles/scss',
-                        cssDir: yeomanConfig.appPath + '/styles/css',
-                        force: true
-                    }
-                }
-            }, <%
-        } %>
         htmlmin: {
             dist: {
                 options: {
-                    removeCommentsFromCDATA: true,
-                    // https://github.com/yeoman/grunt-usemin/issues/44
-                    //collapseWhitespace: true,
+                    collapseWhitespace: true,
+                    conservativeCollapse: true,
                     collapseBooleanAttributes: true,
+                    removeCommentsFromCDATA: true,
+                    removeOptionalTags: true,
                     removeAttributeQuotes: false,
                     removeRedundantAttributes: false,
                     useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true
+                    removeEmptyAttributes: true
                 },
                 files: [{
                     expand: true,
@@ -196,6 +127,19 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        // Allow the use of non-minsafe AngularJS files. Automatically makes it
+        // minsafe compatible so Uglify does not destroy the ng references
+        ngAnnotate: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: yeomanConfig.dist + '/' + yeomanConfig.name + '/scripts',
+                    src: '*.js',
+                    dest: yeomanConfig.dist + '/' + yeomanConfig.name + '/scripts'
+                }]
+            }
+        },
+
         // Put files not handled in other tasks here
         copy: {
             dist: {
@@ -221,17 +165,6 @@ module.exports = function(grunt) {
                     ]
                 }]
             },
-            au: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: yeomanConfig.app,
-                    dest: yeomanConfig.dist,
-                    src: [
-                        'docApp/**/*'
-                    ]
-                }]
-            },
             dev: {
                 files: [{
                     cwd: yeomanConfig.app,
@@ -240,38 +173,10 @@ module.exports = function(grunt) {
                         '*.{ico,png,txt,html,jsp}',
                         '.htaccess',
                         yeomanConfig.name + '/**/*',
-                        'docApp/**/*',
                         'vendor/**/*'
                     ],
                     dest: yeomanConfig.dist
                 }]
-            }
-        },
-        concurrent: {
-            gaeserver: [
-                'watch',
-                'gaej'
-            ],
-            options: {
-                logConcurrentOutput: true
-            }
-        },
-        karma: {
-            unit: {
-                configFile: yeomanConfig.appPath + '/test/karma-unit.conf.js',
-            },
-            e2e: {
-                configFile: yeomanConfig.appPath + '/test/karma-e2e.conf.js',
-            },
-            e2esinglerun: {
-                configFile: yeomanConfig.appPath + '/test/karma-e2e.conf.js',
-                singleRun: true,
-                browsers: ['PhantomJS'],
-            }
-        },
-        cdnify: {
-            dist: {
-                html: [yeomanConfig.dist + '/' + yeomanConfig.name + '/*.html']
             }
         },
         ngmin: {
@@ -286,14 +191,14 @@ module.exports = function(grunt) {
         },
         uglify: {
             options: {
-                banner: '/* ' + yeomanConfig.name + ' - <%= revision %> \n' +
-                    ' * <%= grunt.template.today("dd/mm/yyyy") %> \n' +
+                banner: '/* ' + yeomanConfig.name + ' - <%%= revision %> \n' +
+                    ' * <%%= grunt.template.today("dd/mm/yyyy") %> \n' +
                     ' */\n'
             },
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/<%= yeoman.name %>/scripts/scripts.js': [
-                        '<%= yeoman.dist %>/<%= yeoman.name %>/scripts/scripts.js'
+                    '<%%= yeoman.dist %>/<%%= yeoman.name %>/scripts/scripts.js': [
+                        '<%%= yeoman.dist %>/<%%= yeoman.name %>/scripts/scripts.js'
                     ]
                 }
             }
@@ -304,14 +209,6 @@ module.exports = function(grunt) {
                 src: yeomanConfig.dist + '/index.html',
                 /** @optional  - string directory name*/
                 dest: yeomanConfig.dist + '/'
-            }
-        },
-        gaej: {
-            options: {
-                appengineSdkPath: gaeConfig.appengineSdkPath,
-                warPath: gaeConfig.warPath,
-                address: gaeConfig.address,
-                port: gaeConfig.port
             }
         },
         'string-replace': {
@@ -363,50 +260,18 @@ module.exports = function(grunt) {
         rename: {
             dist: {
                 files: [{
-                    src: ['<%= yeoman.app %>/index.jsp'],
-                    dest: '<%= yeoman.app %>/index.html'
+                    src: ['<%%= yeoman.app %>/index.jsp'],
+                    dest: '<%%= yeoman.app %>/index.html'
                 }]
             },
             revert: {
                 files: [{
-                    src: ['<%= yeoman.app %>/index.html'],
-                    dest: '<%= yeoman.app %>/index.jsp'
+                    src: ['<%%= yeoman.app %>/index.html'],
+                    dest: '<%%= yeoman.app %>/index.jsp'
                 }, {
-                    src: ['<%= yeoman.dist %>/index.html'],
-                    dest: '<%= yeoman.dist %>/index.jsp'
+                    src: ['<%%= yeoman.dist %>/index.html'],
+                    dest: '<%%= yeoman.dist %>/index.jsp'
                 }]
-            }
-        },
-        manifest: {
-            dev: {
-                options: {
-                    basePath: './' + yeomanConfig.app,
-                    network: ['*'],
-                    preferOnline: false,
-                    verbose: true,
-                    timestamp: true,
-                    hash: true,
-                    master: ['index.jsp']
-                },
-                src: [
-                    yeomanConfig.name + '/**/*.{js,html,ico,png,jpg}', 'vendor/**/*.{js,html,ico,png,jpg}'
-                ],
-                dest: yeomanConfig.app + '/manifest.appcache'
-            },
-            dist: {
-                options: {
-                    basePath: './' + yeomanConfig.dist,
-                    network: ['*'],
-                    preferOnline: false,
-                    verbose: true,
-                    timestamp: true,
-                    hash: true,
-                    master: ['index.jsp']
-                },
-                src: [
-                    yeomanConfig.name + '/**/*.{js,html,ico,png,jpg}', 'vendor/**/*.{js,html,ico,png,jpg}'
-                ],
-                dest: yeomanConfig.app + '/manifest.appcache'
             }
         },
         ngtemplates: {
@@ -428,81 +293,13 @@ module.exports = function(grunt) {
                     }
                 }
             }
-        },
-        ngdocs: {
-            options: {
-                scripts: [
-                    yeomanConfig.app + '/vendor/jquery/dist/jquery.min.js',
-                    'angular.js'
-                ],
-                styles: [yeomanConfig.appPath + '/styles/css/main.css'],
-                animation: true,
-                dest: yeomanConfig.app + '/docs',
-            },
-            appDoc: {
-                src: [yeomanConfig.appPath + '/scripts/**/*.js'],
-                title: yeomanConfig.name
-            }
         }
     });
 
-    grunt.registerTask('server', function(target) {
-        if (target === 'dist') {
-            return grunt.task.run([
-                'clean',
-                'build:rtest:au-bbva.com',
-                'open:server',
-                'connect:dist',
-                'watch'
-            ]);
-        } else if (target === 'gae') {
-            return grunt.task.run([
-                'open:server', <%
-                if (compasssass) { %>
-                    'compass:server', <%
-                } %>
-                'concurrent:gaeserver'
-            ]);
-        } else {
-            return grunt.task.run([
-                'open:server', <%
-                if (compasssass) { %>
-                    'compass:server', <%
-                } %>
-                'connect:server',
-                'watch'
-            ]);
-        }
-    });
-
-    grunt.registerTask('test', function(target) {
-        if (target === 'unit') {
-            return grunt.task.run([
-                'clean', <%
-                if (compasssass) { %>
-                    'compass:server', <%
-                } %>
-                'connect:test',
-                'open:test',
-                'open:testkarma',
-                'karma:unit'
-            ]);
-        } else if (target === 'build') {
-            return grunt.task.run([
-                'clean',
-                'connect:test',
-                'karma:unit',
-                'karma:e2esinglerun'
-            ]);
-        } else {
-            return grunt.task.run([
-                'clean',
-                'connect:test',
-                'open:test',
-                'open:testkarma',
-                'karma:e2e'
-            ]);
-        }
+    grunt.registerTask('serve', function(target) {
+        return grunt.task.run([
+            'connect:server'
+        ]);
     });
 
     grunt.registerTask('build', function(p_revision, p_env) {
@@ -533,34 +330,21 @@ module.exports = function(grunt) {
             grunt.task.run([
                 'rename:dist',
                 'ngtemplates',
-                'useminPrepare', <%
-                if (compasssass) { %>
-                    'compass:server', <%
-                } %>
-                'imagemin',
+                'useminPrepare',
                 'htmlrefs',
                 'concat',
+                'ngAnnotate',
                 'copy:dist',
                 'cssmin',
-                'cdnify',
                 'ngmin',
                 'uglify',
                 'rev',
                 'usemin',
-                'rename:revert',
-                //'string-replace:dist',
-                //'string-replace:distwebxml'
+                'rename:revert'
             ]);
         } else {
             grunt.task.run([
                 'copy:dev',
-                'ngdocs'
-            ]);
-        }
-
-        if (p_env == minifyEnv[1]) {
-            grunt.task.run([
-                'copy:au'
             ]);
         }
 
@@ -572,9 +356,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'jshint',
-        'test:build',
-        'build'
+        'serve'
     ]);
 
 };

@@ -54,7 +54,6 @@ Generator.prototype.createDirectiveFiles = function createDirectiveFiles() {
     var appName = this.env.options.applName;
 
     this.appTemplate('directive', appPath + '/scripts/directives/' + this.name);
-    this.testTemplate('unit/directive', appPath + '/test/unit/directives/' + this.name);
     this.addScriptToIndex('app', appName + '/scripts/directives/' + this.name);
 
 };
