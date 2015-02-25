@@ -1,0 +1,138 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <% if (bootstrap) { %>
+    <link rel="stylesheet" href="../vendor/bootstrap/docs/assets/css/bootstrap.css"><% } %>
+    <!-- build:remove -->
+    <link rel="stylesheet" href="styles/css/main.css">
+    <link rel="stylesheet" href="styles/css/original.css">
+    <!-- endbuild -->
+
+    <% if (jquery) { %>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script><% } %>
+    <% if (bbvafront) { %>
+    <script src="https://bbva-front.appspot.com/js/bbva.front.js"></script><% } %>
+    <% if (bootstrap) { %>
+    <script src="../vendor/bootstrap/docs/assets/js/bootstrap.min.js"></script><% } %>
+
+    <script src="../vendor/angular/angular.js"></script>
+    <script src="vendor/angular-route/angular-route.js"></script><% if (resourceModule) { %>
+    <script src="../vendor/angular-resource/angular-resource.js"></script><% } %><% if (cookiesModule) { %>
+    <script src="../vendor/angular-cookies/angular-cookies.js"></script><% } %><% if (sanitizeModule) { %>
+    <script src="../vendor/angular-sanitize/angular-sanitize.js"></script><% } %>
+    <script src="../vendor/angular-translate/angular-translate.js"></script>
+
+    <!-- build:remove --><!-- LiveReload plugin to refresh app on file changes -->
+    <script src="http://localhost:44444/livereload.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/scripts.js -->    
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/templates/templates.js"></script>
+    <!-- endbuild -->
+
+	<script>
+      angular.module('parentApp', []);
+      angular.module('parentApp').controller('testCtrl', ['${symbol_dollar}scope', function(${symbol_dollar}scope){
+          ${symbol_dollar}scope.parentData = {
+                                config : {
+                                    rootPathService : "s"
+                                  , lang : "es_ES"
+                                  , theme : "original"
+                                  , availableHeight : 150
+                                },
+                                notifications : {
+                                  //falta definición
+                                }
+                              };
+          ${symbol_dollar}scope.widget = {};
+          ${symbol_dollar}scope.widget.url="dist/scripts/scripts.js";
+          ${symbol_dollar}scope.widget.moduleName = "<%= _.camelize(appname) %>";
+      }]);
+
+      angular.module('parentApp').directive('externalWidget', function factory() {
+        var directiveDefinitionObject = {
+          priority: 0,
+          template: "<div></div>",
+          replace: true,
+          restrict: 'A',
+          scope: {
+            widgetinfo: '=',
+            pipe: '='
+          },
+          controller: ['${symbol_dollar}scope', '${symbol_dollar}element', function(${symbol_dollar}scope, ${symbol_dollar}element) {
+
+            ${symbol_dollar}scope.remoteChange = false;          
+
+            ${symbol_dollar}scope.updatePipe = function(p_value){
+              ${symbol_dollar}scope.pipe = p_value;
+              ${symbol_dollar}scope.remoteChange = true;
+              if(!${symbol_dollar}scope.this.${symbol_dollar}root.${symbol_dollar}${symbol_dollar}phase && ! ${symbol_dollar}scope.${symbol_dollar}${symbol_dollar}phase){
+                ${symbol_dollar}scope.${symbol_dollar}digest();
+                ${symbol_dollar}scope.this.${symbol_dollar}root.${symbol_dollar}digest();
+              }                
+            }
+
+            var newElement = angular.element("<div " + angular.lowercase(${symbol_dollar}scope.widgetinfo.moduleName) + "></div>");
+
+            ${symbol_dollar}scope.${symbol_dollar}on('widgetReady', function(){
+              newElement.scope().updateSharedData(${symbol_dollar}scope.pipe);
+              ${symbol_dollar}scope.${symbol_dollar}watch('pipe', function(newValue, oldValue){
+                if(!${symbol_dollar}scope.remoteChange){
+                  newElement.scope().updateSharedData(newValue);
+                }
+                ${symbol_dollar}scope.remoteChange = false;
+              },true);
+            });     
+
+            ${symbol_dollar}element.append(newElement);
+            angular.bootstrap(newElement,[${symbol_dollar}scope.widgetinfo.moduleName]);                       
+
+          }]
+        };
+        return directiveDefinitionObject;
+      });
+
+    </script>
+  </head>
+  
+  <body ng-app='parentApp'>
+        <div ng-controller="testCtrl" style="margin:40px;">
+            <h2>Welcome to this <span style="color:${symbol_pound}005496">FFA</span> (an <span style="color:${symbol_pound}D14">Angular</span> based) application with a widget!!</h2><br/>
+
+            This ParentApp has a "config" to provide their widgets basic info about language, themes, styles...<br/><br/>
+
+            This "config" is:
+            <p>
+            <span style="padding-left:55px">config : {</span><br/>
+            <span style="padding-left:75px">"rootPathService" : {{parentData.config.rootPathService}},</span><br/>
+            <span style="padding-left:75px">"lang" : {{parentData.config.lang}},</span><br/>
+            <span style="padding-left:75px">"theme" : {{parentData.config.theme}},</span><br/>
+            <span style="padding-left:75px">"availableHeight" : {{parentData.config.availableHeight}}</span><br/>
+            <span style="padding-left:55px">}</span>
+            </p>
+            Selecciona un idioma (es_ES, en_US, en_GB, pt_PT):<br/>
+            <input ng-model="parentData.config.lang"/><br/><br/>
+
+            Selecciona un tema (original, luz):<br/>
+            <input ng-model="parentData.config.theme"/><br/><br/>
+
+            GHPD provides an automatic widget height:<br/>
+            <input ng-model="parentData.config.availableHeight"/><br/><br/>
+
+            <!-- Add your divable directive here -->
+            <div external-widget style="border:solid 2px black; width:300px; overflow:hidden;" widgetinfo="widget" pipe="parentData"></div>
+        </div>
+  </body>
+  
+</html>

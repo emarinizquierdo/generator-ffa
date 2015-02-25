@@ -1,0 +1,66 @@
+/*Original skin example style for widget*/
+.ffa-<%= _.camelize(appname) %>widget-Widget .navi {
+	margin-top:10px;
+	margin-left: 0px;
+	display: inline-block;
+	width: 100%;
+	border-top: 0;
+	border-right: 0;
+	border-left: 1px solid #cdcece;
+	border-bottom: 1px solid #cdcece;
+	background: none;
+	height: 35px;	
+	font-size: 0.9em;
+	list-style: none;
+	padding: 0;
+	zoom: 1;
+}
+
+.ffa-<%= _.camelize(appname) %>widget-Widget .navi ul, ol{
+	padding: 0;
+	margin: 0 0 10px 25px;
+}
+
+.ffa-<%= _.camelize(appname) %>widget-Widget .navi li {
+	position: relative;
+	float: left;
+	border-style: solid;
+	border-width: 0 1px 0 0;
+	vertical-align: top;
+	zoom: 1;
+	box-sizing: content-box;
+	list-style: none;
+	height: 30px;
+	padding-top: 5px;
+	border-right: 1px solid #cdcece;
+}
+
+.ffa-<%= _.camelize(appname) %>widget-Widget .navi li span {
+	font-weight: 700;
+	color: #424242;
+	padding: 10px 15px;
+	padding-bottom: 6px;
+	padding-top: 5px;
+	outline: none;
+	text-decoration: none;
+	line-height: 23px;
+	border-right: 0;
+}
+
+.ffa-<%= _.camelize(appname) %>widget-Widget [class^="ffa-icon-"],
+.ffa-<%= _.camelize(appname) %>widget-Widget [class*=" ffa-icon-"] {
+  display: inline-block;
+  width: 0px;
+  height: 14px;
+  margin-top: 1px;
+  *margin-right: .3em;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../images/glyphicons-halflings.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+}
+
+.ffa-<%= _.camelize(appname) %>widget-Widget .ffa-icon-eye-open{
+	background-position: -86px -120px;
+}

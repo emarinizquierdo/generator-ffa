@@ -1,0 +1,53 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <% if (bootstrap) { %>
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css"><% } %>
+    <!-- build:css <%= _.camelize(appname) %>/styles/css/main.css -->
+    <link rel="stylesheet" href="<%= _.camelize(appname) %>/styles/css/main.css">
+    <!-- endbuild -->
+
+    <% if (jquery) { %>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script><% } %>
+    <% if (bbvafront) { %>
+    <script src="https://bbva-front.appspot.com/js/bbva.front.js"></script><% } %>
+    <% if (bootstrap) { %>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script><% } %>
+
+    <!-- build:js <%= _.camelize(appname) %>/scripts/scripts.js -->
+    <script src="vendor/angular/angular.js"></script>
+    <script src="vendor/angular-route/angular-route.js"></script><% if (resourceModule) { %>
+    <script src="vendor/angular-resource/angular-resource.js"></script><% } %><% if (cookiesModule) { %>
+    <script src="vendor/angular-cookies/angular-cookies.js"></script><% } %><% if (sanitizeModule) { %>
+    <script src="vendor/angular-sanitize/angular-sanitize.js"></script><% } %>
+    
+    <script src="<%= _.camelize(appname) %>/scripts/app.js"></script>
+    <script src="<%= _.camelize(appname) %>/scripts/templates/templates.js"></script>
+    <script src="<%= _.camelize(appname) %>/scripts/controllers/main.js"></script>
+    <script src="<%= _.camelize(appname) %>/scripts/controllers/home.js"></script>
+    <!-- endbuild -->
+
+  </head>
+  <body ng-app="<%= _.camelize(appname) %>App">
+
+    <!-- Add your site or application content here -->
+    <div class="wrapper" ng-controller="MainCtrl">
+        <div class="container" ng-view></div>
+    </div>
+
+    <script>
+        if( window.location.protocol == "http:" && window.location.hostname != "localhost" ){
+            window.location.href = "https" + window.location.href.substr(4);
+        }
+    </script>
+  </body>
+</html>

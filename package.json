@@ -1,0 +1,48 @@
+{
+  "name": "generator-ffa",
+  "version": "0.1.2",
+  "description": "Yeoman generator for FFA (BBVA WEB Front) Application",
+  "keywords": [
+    "yeoman-generator",
+    "scaffold",
+    "framework",
+    "component",
+    "front-end",
+    "app"
+  ],
+  "homepage": "https://sites.google.com/a/bbva.com/ffa-site/",
+  "bugs": "https://sites.google.com/a/bbva.com/ffa-site/community/bugs",
+  "author": "FFA team",
+  "main": "app/index.js",
+  "repository": {
+    "type": "svn",
+    "url": "https://www.frontydispositivos.com/svn/generator-ffa/trunk/"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.11.0",
+    "http-get": "~0.5.10"
+  },
+  "peerDependencies": {
+    "generator-karma": "~0.5.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-conventional-changelog": "~0.0.12",
+    "marked": "~0.2.8",
+    "semver": "~1.1.4",
+    "grunt-release": "~0.3.3"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "licenses": [
+    {
+      "type": "BSD"
+    }
+  ]
+}
