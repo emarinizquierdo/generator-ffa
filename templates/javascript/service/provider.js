@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('<%= _.camelize(appname) %><% if (isApp) { %>App<% } %>')
+angular.module('<%= _.camelize(appname) %>App')
   .provider('<%= _.camelize(name) %>', function () {
 
     // Private variables

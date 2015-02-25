@@ -1,4 +1,4 @@
 {
-  "name": "<%= _.camelize(appname) %>",
-  "appPath": "<%= _.camelize(apppath) %>"
+    "name": "<%= _.camelize(appname) %>",
+    "appPath": "<%= _.camelize(apppath) %>"
 }

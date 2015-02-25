@@ -1,15 +1,17 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
+#set( $symbol_pound = '#' ) #set( $symbol_dollar = '$' ) #set( $symbol_escape = '\' )
 <div class="ffa-<%= _.camelize(appname) %>-Widget">
-	<div ng-controller='MainCtrl<%= _.camelize(appname) %>' ng-style="{height:remoteInfo.config.availableHeight}">
-		This is the main directive template, and this value ({{controllerTemplate}}) is inside.<br/>
-		{{ 'COMMON.EXAMPLE' | translate }}<br/>
-		This is a styled list:<br/>
-	  	<ul class='navi'>
-			<li><span class="ffa-icon-eye-open"></span><span>One</span></li>
-			<li><span class="ffa-icon-eye-open"></span><span>Two</span></li>
-			<li><span class="ffa-icon-eye-open"></span><span>Three</span></li>
-		</ul>
-	</div>	
+    <div ng-controller='MainCtrl<%= _.camelize(appname) %>' ng-style="{height:remoteInfo.config.availableHeight}">
+        This is the main directive template, and this value ({{controllerTemplate}}) is inside.
+        <br/> {{ 'COMMON.EXAMPLE' | translate }}
+        <br/> This is a styled list:
+        <br/>
+        <ul class='navi'>
+            <li><span class="ffa-icon-eye-open"></span><span>One</span>
+            </li>
+            <li><span class="ffa-icon-eye-open"></span><span>Two</span>
+            </li>
+            <li><span class="ffa-icon-eye-open"></span><span>Three</span>
+            </li>
+        </ul>
+    </div>
 </div>

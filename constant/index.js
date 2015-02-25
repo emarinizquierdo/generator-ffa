@@ -9,20 +9,16 @@ module.exports = Generator;
 
 function Generator() {
 
-  ScriptBase.apply(this, arguments);
-  
-  this.isApp = (typeof this.options.isApp === 'undefined') ? false : this.options.isApp;
+    ScriptBase.apply(this, arguments);
 
-  this.hookFor('ffa:service', {
-    options : {
-      options : {
-        isApp : this.isApp,
-        type : 'constant'
-      }
-    }
-  });
+    this.hookFor('ffa:service', {
+        options: {
+            options: {
+                type: 'constant'
+            }
+        }
+    });
 
 }
 
 util.inherits(Generator, ScriptBase);
-

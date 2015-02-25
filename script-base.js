@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util');
 var path = require('path');
-var http = require('http-get');
+//var http = require('http-get');
 var fs = require('fs');
 
 var yeoman = require('yeoman-generator');
@@ -96,7 +96,7 @@ Generator.prototype.addScriptToIndex = function (src, dest) {
     console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + dest + '.js ' + 'not added.\n'.yellow);
   }
 };
-
+/*
 Generator.prototype.copyFromRemote = function( url, relativeFilePath, fileCopyDone ){
 
   var DirPath = path.join( process.cwd(), path.dirname(relativeFilePath) );
@@ -119,4 +119,4 @@ Generator.prototype.copyFromRemote = function( url, relativeFilePath, fileCopyDo
 
   });
 
-}
+}*/
