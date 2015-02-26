@@ -18,13 +18,11 @@ var welcome =
     '\n| $$__/ $$| $$__/ $$   \\$$ $$  | $$  | $$' +
     '\n| $$    $$| $$    $$    \\$$$   | $$  | $$' +
     '\n \\$$$$$$$  \\$$$$$$$      \\$     \\$$   \\$$' +
-    '\n\n\n         Welcome to FFA Generator \n\n' +
-    '\n We are working to provide that feature. Thanks  \n';
-
+    '\n\n\n         Welcome to FFA Generator \n\n\n';
 
 var Generator = module.exports = function Generator(args, options) {
 
-    console.log(welcome);
+    console.log(welcome.cyan);
 
     if (fs.existsSync('package.json')) {
         fs.unlinkSync('package.json');

@@ -48,21 +48,11 @@ angular.module('<%= _.camelize(appname) %>App').factory('customLoader', ['$http'
 
         return deferred.promise;
     }
-}]);
 
-var <%= _.camelize(appname) %>App = {
-    auxLanguage: 'es_ES',
-    timer: null,
-    isGHPD: false
-};
+}]);
 
 //Application run.
 angular.module('<%= _.camelize(appname) %>App').run(['$rootScope', '$translate', '$location', '$timeout', 'Utils', function($rootScope, $translate, $location, $timeout, Utils) {
-
-    $rootScope.loadingApp = true;
-
-    $translate.use( <%= _.camelize(appname) %>App.auxLanguage);
-    Utils.conf.inGHPD = <%= _.camelize(appname) %>App.isGHPD;
 
     /* Statistic Record - App Access */
     /* Record only if application owner wants to record statistics */
@@ -89,24 +79,3 @@ angular.module('<%= _.camelize(appname) %>App').run(['$rootScope', '$translate',
     //bbva.front.global.Invoke('RegisterLogout', [_origin + '/Logout?guest=true&output=jsonP']);
 
 }]);
-
-/* We ask for the language to HPD if the application live inside it */
-/* Else we load in 2 seconds. Be sure if the app will be live alone. */
-/* In this case, don't wait for HPD */
-$(document).ready(function() {
-
-    <%= _.camelize(appname) %>App.timer = setTimeout(function() {
-        angular.bootstrap(document.getElementById('ng-app'), ['<%= _.camelize(appname) %>App']);
-    }, 2000);
-
-    bbva.front.global.Invoke("getCurrentLanguage", function(data) {
-
-         <%= _.camelize(appname) %>App.auxLanguage = data.lang;
-         <%= _.camelize(appname) %>App.isGHPD = true;
-
-        clearTimeout( <%= _.camelize(appname) %>App.timer );
-        angular.bootstrap(document.getElementById('ng-app'), ['<%= _.camelize(appname) %>App']);
-
-    });
-
-});

@@ -1,5 +1,6 @@
 'use strict';
 
+var modRewrite = require('connect-modrewrite');
 var mountFolder = function(connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
@@ -41,10 +42,13 @@ module.exports = function(grunt) {
                 keepalive: true
             },
             server: {
-                middleware: function(connect) {
-                    return [
-                        connect.static(options.base)
-                    ];
+                options: {
+                    middleware: function(connect) {
+                        return [ 
+                            modRewrite (['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg$ /index.html [L]']),
+                            mountFolder(connect, 'app')
+                        ];
+                    }
                 }
             }
         },

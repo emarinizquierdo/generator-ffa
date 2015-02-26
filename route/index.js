@@ -11,7 +11,6 @@ function Generator(args) {
 
     ScriptBase.apply(this, arguments);
 
-    console.log
     this.hookFor('ffa:controller', {
         options: {
             options: {}
