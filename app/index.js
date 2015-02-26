@@ -53,7 +53,8 @@ var Generator = module.exports = function Generator(args, options) {
 
     this.appname = this.appname.replace(/\-/g, "");
     this.env.options.appPath = 'app';
-    this.env.options.appPath += '/' + this.appname;
+    this.env.options.appName = this.appname;
+    this.env.options.appPath += '/' +  this.env.options.appName;
     this.apppath = this.env.options.appPath;
 
     if (typeof this.env.options.minsafe === 'undefined') {
@@ -72,17 +73,15 @@ var Generator = module.exports = function Generator(args, options) {
     });
 
     this.hookFor('ffa:main', {
-        args: args,
-        options: {
-            options: {}
-        }
+        args: args
     });
 
     this.hookFor('ffa:controller', {
-        args: args,
-        options: {
-            options: {}
-        }
+        args: args
+    });
+
+    this.hookFor('ffa:controller', {
+        args: ['home']
     });
 
     this.on('end', function() {
@@ -94,33 +93,6 @@ var Generator = module.exports = function Generator(args, options) {
 }
 
 util.inherits(Generator, yeoman.generators.Base);
-
-if (this.appname == path.basename(process.cwd())) {
-    
-    Generator.prototype.askForAppName = function askForAppName() {
-        var cb = this.async();
-
-        console.log(welcome);
-
-        this.prompt({
-            name: 'appname',
-            message: 'How do you want to name your app/widget?',
-            default: this.appname.replace(/\-/g, "")
-        }, function(err, props) {
-            if (err) {
-                return this.emit('error', err);
-            }
-
-            this.appname = props.appname.replace(/\-/g, "");
-            this.env.options.appPath += '/' + this.appname;
-            this.apppath = this.env.options.appPath;
-
-            cb();
-        }.bind(this));
-    };
-    
-
-}
 
 Generator.prototype.createIndexHtml = function createIndexHtml() {
 

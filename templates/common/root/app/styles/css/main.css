@@ -1,1 +1,9 @@
-/* Will be compiled down to a single stylesheet with your sass files */
+/* Will be compiled down to a single stylesheet */
+
+@font-face {
+    font-family: 'bbvaDefaultFont';
+    src: url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-book.woff") format("woff"), url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-book.ttf") format("truetype"), url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-book.svg") format("svg"), url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-book.eot") format("embedded-opentype");
+}
+@font-face {
+    font-family: 'bbvaLightFont';
+    src: url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-light.woff") format("woff"), url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-light.ttf") format("truetype"), url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-light.svg") format("svg"), url("https://storage.googleapis.com/bbva-front.appspot.com/fonts/bbvaweb/bbvaweb-light.eot") format("embedded-opentype");

@@ -1,4 +1,4 @@
-angular.module('<%= _.camelize(appname) %>App').factory( "Utils", ['$translate', function( $translateProvider ){
+angular.module('<%= _.camelize(appname) %>App').factory( "Utils", ['$translate', function( $translate ){
 		
 		var _Utils = {};
 
@@ -20,7 +20,7 @@ angular.module('<%= _.camelize(appname) %>App').factory( "Utils", ['$translate',
 
 		_Utils.configureApp = function() {
 			
-			bbva.front.global.Invoke( 'configureApp', appConfig );
+			bbva.front.global.Invoke( 'configureApp', _appConfig );
 			bbva.front.util.crossframe.SetAutoWindowResize(true);
 			
 		}

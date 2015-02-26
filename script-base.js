@@ -84,7 +84,7 @@ Generator.prototype.htmlTemplate = function (src, dest) {
 Generator.prototype.addScriptToIndex = function (src, dest) {
   try {
     var appPath = this.env.options.appPath;
-    var fullPath = path.join(src, 'index.html');
+    var fullPath = path.join(src, 'index.jsp');
     angularUtils.rewriteFile({
       file: fullPath,
       needle: '<!-- endbuild -->',

@@ -7,8 +7,8 @@
  *
  * Main module of the application.
  */
-angular.module('<%= _.camelize(appname) %>App', ['ngRoute', 'ngRoute', 'ngSanitize', 'pascalprecht.translate'])
-    .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+angular.module('<%= _.camelize(appname) %>App', ['ngRoute', 'ngSanitize', 'ngResource', 'pascalprecht.translate'])
+    .config(['$locationProvider', '$routeProvider', '$translateProvider', function($locationProvider, $routeProvider, $translateProvider) {
 
         $routeProvider
             .when('/', {
@@ -50,7 +50,7 @@ angular.module('<%= _.camelize(appname) %>App').factory('customLoader', ['$http'
     }
 }]);
 
-var <%= _.camelize(appname) %> App = {
+var <%= _.camelize(appname) %>App = {
     auxLanguage: 'es_ES',
     timer: null,
     isGHPD: false
@@ -61,11 +61,13 @@ angular.module('<%= _.camelize(appname) %>App').run(['$rootScope', '$translate',
 
     $rootScope.loadingApp = true;
 
-    $translate.use( <%= _.camelize(appname) %> App.auxLanguage);
-    Utils.conf.inGHPD = _isGHPD;
+    $translate.use( <%= _.camelize(appname) %>App.auxLanguage);
+    Utils.conf.inGHPD = <%= _.camelize(appname) %>App.isGHPD;
 
     /* Statistic Record - App Access */
-    /* Record only if app owner wants to record statistics */
+    /* Record only if application owner wants to record statistics */
+    /* To see more information about GHPD Statistics go to: */
+    // https://docs.google.com/a/bbva.com/document/d/1Ch9zJnsSz_i5X4X1cOkGb5sohcYfXnqWTkbb5tLiBJg/edit
     //Utils.statistics.registerAppAccess();
 
     bbva.front.util.crossframe.Subscribe("bbva.front.changeLanguage", function(data) {
@@ -76,33 +78,35 @@ angular.module('<%= _.camelize(appname) %>App').run(['$rootScope', '$translate',
                 Utils.lang.set(data.language);
             });
 
-            $timeout(function() {
-                $location.search('_nc', Date.now());
-            }, 2000);
-
         }
 
     });
 
-    var _origin = $location.$$protocol + '://' + $location.$$host + ':' + $location.$$port;
-    bbva.front.global.Invoke('RegisterLogout', [_origin + '/Logout?guest=true&output=jsonP']);
+    /* Record in HPD that the application was opened */
+    /* To see more information about GHPD Disconnection of applications go to: */
+    // https://docs.google.com/a/bbva.com/document/d/12rY9ZXgrrNm2iEeBBTWh4Za5mkojq9MWW_CgSguGDwg/edit#heading=h.b77ml2nob2t
+    //var _origin = $location.$$protocol + '://' + $location.$$host + ':' + $location.$$port;
+    //bbva.front.global.Invoke('RegisterLogout', [_origin + '/Logout?guest=true&output=jsonP']);
 
 }]);
 
+/* We ask for the language to HPD if the application live inside it */
+/* Else we load in 2 seconds. Be sure if the app will be live alone. */
+/* In this case, don't wait for HPD */
 $(document).ready(function() {
 
-    <%= _.camelize(appname) %> App.timer = setTimeout(function() {
+    <%= _.camelize(appname) %>App.timer = setTimeout(function() {
         angular.bootstrap(document.getElementById('ng-app'), ['<%= _.camelize(appname) %>App']);
-    }, 5000);
-
+    }, 2000);
 
     bbva.front.global.Invoke("getCurrentLanguage", function(data) {
 
          <%= _.camelize(appname) %>App.auxLanguage = data.lang;
          <%= _.camelize(appname) %>App.isGHPD = true;
 
-        clearTimeout( <%= _.camelize(appname) %> App.timer );
+        clearTimeout( <%= _.camelize(appname) %>App.timer );
         angular.bootstrap(document.getElementById('ng-app'), ['<%= _.camelize(appname) %>App']);
 
     });
+
 });

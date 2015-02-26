@@ -1,4 +1,8 @@
 <div class="jumbotron">
-    <h2>Welcome to this <span style="color:${symbol_pound}005496">FFA</span> (an <span style="color:${symbol_pound}D14">Angular</span> based) application!!</h2>
+    <h2>Welcome to this <span style="color:#005496">FFA</span> (an <span style="color:#D14">Angular 1.3.10</span> based) application!!</h2>
     <p>You are using {{controllerView}} to control this view.</p>
+    <p>The following message is multilanguage:</p>
+    {{'COMMON.HELLO_WORLD' | translate}}
+    <button type="button" class="btn btn-success" ng-show="!spanish" ng-click="changeLang('en_US'); spanish=true;">Inglés</button>
+    <button type="button" class="btn btn-success" ng-show="spanish" ng-click="changeLang('es_ES'); spanish=false;">Spanish</button>
 </div>

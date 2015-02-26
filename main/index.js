@@ -11,5 +11,11 @@ var Generator = module.exports = function Generator() {
 util.inherits(Generator, ScriptBase);
 
 Generator.prototype.createAppFile = function createAppFile() {
-    this.appTemplate('app', path.join(this.env.options.appPath, '/scripts/app'));
+
+	var appPath = this.env.options.appPath;
+    var appName = this.env.options.appName;
+
+    this.appTemplate('app', appPath + '/scripts/app');
+    this.addScriptToIndex('app', appName + '/scripts/app');
+
 };
