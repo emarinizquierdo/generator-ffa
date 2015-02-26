@@ -44,8 +44,8 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     middleware: function(connect) {
-                        return [ 
-                            modRewrite (['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg$ /index.html [L]']),
+                        return [
+                            modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg$ /index.html [L]']),
                             mountFolder(connect, 'app')
                         ];
                     }
@@ -71,16 +71,14 @@ module.exports = function(grunt) {
                 yeomanConfig.appPath + '/scripts/{,*/}*.js'
             ]
         },
-        rev: {
+        filerev: {
             dist: {
-                files: {
-                    src: [
-                        yeomanConfig.dist + '/' + yeomanConfig.name + '/scripts/{,*/}*.js',
-                        yeomanConfig.dist + '/' + yeomanConfig.name + '/styles/css/{,*/}*.css',
-                        yeomanConfig.dist + '/' + yeomanConfig.name + '/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                        yeomanConfig.appPath + '/' + yeomanConfig.name + '/styles/fonts/*'
-                    ]
-                }
+                src: [
+                    yeomanConfig.dist + '/' + yeomanConfig.name + '/scripts/{,*/}*.js',
+                    yeomanConfig.dist + '/' + yeomanConfig.name + '/styles/css/{,*/}*.css',
+                    yeomanConfig.dist + '/' + yeomanConfig.name + '/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+                    yeomanConfig.appPath + '/' + yeomanConfig.name + '/styles/fonts/*'
+                ]
             }
         },
         useminPrepare: {
@@ -98,14 +96,14 @@ module.exports = function(grunt) {
         },
         cssmin: {
             options: {
-                banner: '/* ' + yeomanConfig.name + ' - <%%= revision %> \n' +
-                    ' * <%%= grunt.template.today("dd/mm/yyyy") %> \n' +
+                banner: '/* ' + yeomanConfig.name + ' - <%= revision %> \n' +
+                    ' * <%= grunt.template.today("dd/mm/yyyy") %> \n' +
                     ' */\n'
             },
             dist: {
                 files: {
-                    '<%%= yeoman.dist %>/<%%= yeoman.name %>/styles/main.css': [
-                        '<%%= yeoman.dist %>/<%%= yeoman.name %>/styles/main.css'
+                    '<%= yeoman.dist %>/<%= yeoman.name %>/styles/main.css': [
+                        '<%= yeoman.dist %>/<%= yeoman.name %>/styles/main.css'
                     ]
                 }
             }
@@ -183,26 +181,16 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        ngmin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: yeomanConfig.dist + '/' + yeomanConfig.name + '/scripts',
-                    src: '*.js',
-                    dest: yeomanConfig.dist + '/' + yeomanConfig.name + '/scripts'
-                }]
-            }
-        },
         uglify: {
             options: {
-                banner: '/* ' + yeomanConfig.name + ' - <%%= revision %> \n' +
-                    ' * <%%= grunt.template.today("dd/mm/yyyy") %> \n' +
+                banner: '/* ' + yeomanConfig.name + ' - <%= revision %> \n' +
+                    ' * <%= grunt.template.today("dd/mm/yyyy") %> \n' +
                     ' */\n'
             },
             dist: {
                 files: {
-                    '<%%= yeoman.dist %>/<%%= yeoman.name %>/scripts/scripts.js': [
-                        '<%%= yeoman.dist %>/<%%= yeoman.name %>/scripts/scripts.js'
+                    '<%= yeoman.dist %>/<%= yeoman.name %>/scripts/scripts.js': [
+                        '<%= yeoman.dist %>/<%= yeoman.name %>/scripts/scripts.js'
                     ]
                 }
             }
@@ -264,17 +252,17 @@ module.exports = function(grunt) {
         rename: {
             dist: {
                 files: [{
-                    src: ['<%%= yeoman.app %>/index.jsp'],
-                    dest: '<%%= yeoman.app %>/index.html'
+                    src: ['<%= yeoman.app %>/index.jsp'],
+                    dest: '<%= yeoman.app %>/index.html'
                 }]
             },
             revert: {
                 files: [{
-                    src: ['<%%= yeoman.app %>/index.html'],
-                    dest: '<%%= yeoman.app %>/index.jsp'
+                    src: ['<%= yeoman.app %>/index.html'],
+                    dest: '<%= yeoman.app %>/index.jsp'
                 }, {
-                    src: ['<%%= yeoman.dist %>/index.html'],
-                    dest: '<%%= yeoman.dist %>/index.jsp'
+                    src: ['<%= yeoman.dist %>/index.html'],
+                    dest: '<%= yeoman.dist %>/index.jsp'
                 }]
             }
         },
@@ -340,9 +328,8 @@ module.exports = function(grunt) {
                 'ngAnnotate',
                 'copy:dist',
                 'cssmin',
-                'ngmin',
                 'uglify',
-                'rev',
+                'filerev',
                 'usemin',
                 'rename:revert'
             ]);
