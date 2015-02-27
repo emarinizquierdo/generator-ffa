@@ -84,7 +84,16 @@ module.exports = function(grunt) {
         useminPrepare: {
             html: yeomanConfig.app + '/index.html',
             options: {
-                dest: yeomanConfig.dist
+                dest: yeomanConfig.dist,
+                flow: {
+                    html: {
+                        steps: {
+                            js: ['concat', 'uglifyjs'],
+                            css: ['cssmin']
+                        },
+                        post: {}
+                    }
+                }
             }
         },
         usemin: {
@@ -94,20 +103,38 @@ module.exports = function(grunt) {
                 dirs: [yeomanConfig.dist]
             }
         },
-        cssmin: {
-            options: {
-                banner: '/* ' + yeomanConfig.name + ' - <%= revision %> \n' +
-                    ' * <%= grunt.template.today("dd/mm/yyyy") %> \n' +
-                    ' */\n'
-            },
-            dist: {
-                files: {
-                    '<%= yeoman.dist %>/<%= yeoman.name %>/styles/main.css': [
-                        '<%= yeoman.dist %>/<%= yeoman.name %>/styles/main.css'
-                    ]
-                }
-            }
-        },
+        // The following *-min tasks will produce minified files in the dist folder
+        // By default, your `index.html`'s <!-- Usemin block --> will take care of
+        // minification. These next options are pre-configured if you do not wish
+        // to use the Usemin blocks.
+        // cssmin: {
+        //      options: {
+        //          banner: '/* ' + yeomanConfig.name + ' - <%%= revision %> \n' +
+        //              ' * <%%= grunt.template.today("dd/mm/yyyy") %> \n' +
+        //              ' */\n'
+        //          },
+        //          dist: {
+        //          files: {
+        //              '<%%= yeoman.dist %>/<%%= yeoman.name %>/styles/css/main.css': [
+        //              '<%%= yeoman.dist %>/<%%= yeoman.name %>/styles/css/main.css'
+        //              ]
+        //          }
+        //      }
+        //},
+        // uglify: {
+        //      options: {
+        //          banner: '/* ' + yeomanConfig.name + ' - <%%= revision %> \n' +
+        //            ' * <%%= grunt.template.today("dd/mm/yyyy") %> \n' +
+        //            ' */\n'
+        //    },
+        //    dist: {
+        //        files: {
+        //            '<%%= yeoman.dist %>/<%%= yeoman.name %>/scripts/scripts.js': [
+        //                '<%%= yeoman.dist %>/<%%= yeoman.name %>/scripts/scripts.js'
+        //            ]
+        //        }
+        //    }
+        //},
         htmlmin: {
             dist: {
                 options: {
@@ -181,20 +208,6 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        uglify: {
-            options: {
-                banner: '/* ' + yeomanConfig.name + ' - <%= revision %> \n' +
-                    ' * <%= grunt.template.today("dd/mm/yyyy") %> \n' +
-                    ' */\n'
-            },
-            dist: {
-                files: {
-                    '<%= yeoman.dist %>/<%= yeoman.name %>/scripts/scripts.js': [
-                        '<%= yeoman.dist %>/<%= yeoman.name %>/scripts/scripts.js'
-                    ]
-                }
-            }
-        },
         htmlrefs: {
             dist: {
                 /** @required  - string including grunt glob variables */
@@ -252,17 +265,17 @@ module.exports = function(grunt) {
         rename: {
             dist: {
                 files: [{
-                    src: ['<%= yeoman.app %>/index.jsp'],
-                    dest: '<%= yeoman.app %>/index.html'
+                    src: ['<%%= yeoman.app %>/index.jsp'],
+                    dest: '<%%= yeoman.app %>/index.html'
                 }]
             },
             revert: {
                 files: [{
-                    src: ['<%= yeoman.app %>/index.html'],
-                    dest: '<%= yeoman.app %>/index.jsp'
+                    src: ['<%%= yeoman.app %>/index.html'],
+                    dest: '<%%= yeoman.app %>/index.jsp'
                 }, {
-                    src: ['<%= yeoman.dist %>/index.html'],
-                    dest: '<%= yeoman.dist %>/index.jsp'
+                    src: ['<%%= yeoman.dist %>/index.html'],
+                    dest: '<%%= yeoman.dist %>/index.jsp'
                 }]
             }
         },

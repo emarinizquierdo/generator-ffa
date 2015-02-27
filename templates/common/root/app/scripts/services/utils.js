@@ -28,12 +28,16 @@ angular.module('<%= _.camelize(appname) %>App').factory( "Utils", ['$translate',
 		_Utils.lang = {
 			availables: "en_GB,en_US,es_ES,pt_PT",
         	defaultLang: "es_ES",
+        	currentLang: "es_ES",
         	set : function( p_lang ){
-        		defaultLang: p_lang,
+        		if(!p_lang || ( _Utils.lang.availables.indexOf(p_lang) < 0 ) ){
+        			p_lang = _Utils.lang.defaultLang;
+        		}
+        		_Utils.lang.currentLang = p_lang;
         		$translate.use(p_lang);
         	},
         	get : function(){
-        		return this.defaultLang;
+        		return _Utils.lang.currentLang;
         	}
 		};
 
@@ -56,11 +60,11 @@ angular.module('<%= _.camelize(appname) %>App').factory( "Utils", ['$translate',
 			},
 
 			registerAppAccess : function(){
-				bbva.front.global.Invoke( this.CORS.accessApp, [this.appName] );
+				bbva.front.global.Invoke( _Utils.statistics.CORS.accessApp, [_Utils.statistics.appName] );
 			},
 
 			registerSectionAccess : function( p_section ){
-				bbva.front.global.Invoke( this.CORS.accessTab, [this.appName, p_section] );
+				bbva.front.global.Invoke( _Utils.statistics.CORS.accessTab, [_Utils.statistics.appName, p_section] );
 			},
 
 			registerAction : function( p_section, p_action){
@@ -68,7 +72,7 @@ angular.module('<%= _.camelize(appname) %>App').factory( "Utils", ['$translate',
 				var   _notification = p_notification.preview || p_notification.pushBody || ""
 					, _notificationOrigin = p_notification.atom || "";
 
-				bbva.front.global.Invoke( this.CORS.action, [this.appName, p_section, p_action] );
+				bbva.front.global.Invoke( _Utils.statistics.CORS.action, [_Utils.statistics.appName, p_section, p_action] );
 
 			}
 				

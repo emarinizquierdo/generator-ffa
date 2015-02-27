@@ -3,11 +3,11 @@
 angular.module('<%= _.camelize(appname) %>App')
     .directive('<%= _.camelize(name) %>', function() {
         return {
-            template: '<div></div>',
+            templateUrl: '<%= _.camelize(appname) %>/partials/<%= name %>.html',
             restrict: 'A',
+            replace: true,
             controller: ['$scope', '$element', '$attrs', function controller($scope, $element, $attrs) {
-                $attrs;
-                $element.text('this is the <%= _.camelize(name) %> directive');
+                
             }]
         };
     });
