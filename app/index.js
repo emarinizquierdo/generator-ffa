@@ -55,19 +55,8 @@ var Generator = module.exports = function Generator(args, options) {
     this.env.options.appPath += '/' +  this.env.options.appName;
     this.apppath = this.env.options.appPath;
 
-    if (typeof this.env.options.minsafe === 'undefined') {
-        this.option('minsafe');
-        this.env.options.minsafe = this.options.minsafe;
-        args.push('--minsafe');
-    }
-
     this.hookFor('ffa:common', {
-        args: args,
-        options: {
-            options: {
-                appName: this.appname
-            }
-        }
+        args: args
     });
 
     this.hookFor('ffa:main', {

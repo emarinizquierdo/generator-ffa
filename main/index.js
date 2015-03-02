@@ -17,5 +17,9 @@ Generator.prototype.createAppFile = function createAppFile() {
 
     this.appTemplate('app', appPath + '/scripts/app');
     this.addScriptToIndex('app', appName + '/scripts/app');
+    this.appTemplate('utils', appPath + '/scripts/services/utils');
+    this.addScriptToIndex('app', appName + '/scripts/services/utils');
+	this.sourceRoot(path.join(__dirname, '../templates'));
+    this.template('common/home.html', path.join(appPath, '/views/home.html'));
 
 };
